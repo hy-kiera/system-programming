@@ -1,0 +1,12 @@
+# CMD
+ - [ ] `ls` : list files(directories) in the current path
+ - [x] `pwd` : print the name of the current(working) directory
+ - [ ] `cd` : change the current working directory
+ - [ ] `mkdir` : make a directory
+ - [ ] `rm` : remove files or directories
+ - [ ] `mv` : moves one or more files or directories from one place to another)
+ - [ ] `cp` : copy a file or a directory from one directory to another
+ - [ ] `grep` : search plain-text data sets for lines that match a regular expression
+ - [x] `echo` : output the strings it is being passed as arguments
+ - [x] `cat` : concatenate files
+ - [x] `clear` : bring the command line on top of the terminal
