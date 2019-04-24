@@ -4,13 +4,19 @@
 #include <sys/stat.h>
 #include <sys/types.h>
 
-int main(int argc, char *argv[]){
+void mkdir(int argc, char *argv[]);
+
+int main(void){
+    mkidr();
+}
+
+void mkdir(int argc, char *argv[]){
 	int status;
 	mode_t old;
 
 	if(argc<2){
 		fprintf(stderr, "%s : no arguments\n", argv[0]);
-		exit(1);
+        // exit(1);
 	}
 
 	old = umask(0);
@@ -20,5 +26,4 @@ int main(int argc, char *argv[]){
 								| S_IROTH | S_IWOTH | S_IXOTH);
 	}
 	umask(old);
-	return 0;
 }

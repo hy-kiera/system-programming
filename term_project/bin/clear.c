@@ -1,6 +1,8 @@
 /* clear : bring the command line on top of the terminal */
 #include <unistd.h> // STDOUT_FIENO
 
+#include "../headers/cmds.h"
+
 void clear(void){
     /* ANSI Escape Sequences
        (http://ascii-table.com/ansi-escape-sequences.php)

@@ -1,4 +1,4 @@
-/* cat : concatenate files */
+/* cat : concatenate and print files */
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>

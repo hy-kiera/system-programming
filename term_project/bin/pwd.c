@@ -3,6 +3,8 @@
 #include <stdio.h>
 #include <limits.h>
 
+#include "../headers/cmds.h"
+
 void pwd(void){
     char cwd[PATH_MAX];
     // get current working directory

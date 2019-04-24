@@ -2,6 +2,8 @@
 #include <stdio.h>
 #include <stdlib.h> // getenv()
 
+#include "../headers/cmds.h"
+
 void echo(char *str){
     // check str is a string or a environment variable
     if(str[0] != 36){ // "$" : 36(ascii code)

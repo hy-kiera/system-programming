@@ -4,6 +4,8 @@
 #include <sys/wait.h>
 #include <unistd.h>
 
+#include "headers/execute.h"
+
 #define MAX_LEN 100 /* The maximum length command */
 
 int main(void) {
@@ -54,7 +56,8 @@ int main(void) {
         }
 
         if (pid == 0) {
-            execvp(args[0], args);
+            // execvp(args[0], args);
+            execution(args[0], args);
         }
 
         if (pid > 0) {
