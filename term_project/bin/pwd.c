@@ -5,13 +5,18 @@
 
 #include "../headers/cmds.h"
 
-void pwd(void){
+void pwd(int argc){
     char cwd[PATH_MAX];
-    // get current working directory
-    if(getcwd(cwd, sizeof(cwd)) != NULL) {
-        printf("%s", cwd);
+    if(argc == 1){
+        // get current working directory
+        if(getcwd(cwd, sizeof(cwd)) != NULL) {
+            printf("%s\n", cwd);
+        }
+        else {
+            perror(cwd);
+        }
     }
     else {
-        perror("pwd error");
+        fprintf(stderr, "pwd: too many arguments\n");
     }
 }

@@ -15,6 +15,7 @@ int main(void) {
 
     char *input;
     int status;
+    int argc;
 
     while (should_run) {
         printf("$ ");
@@ -29,15 +30,15 @@ int main(void) {
         while (args[i] != NULL) {
             i++;
             args[i] = strtok(NULL, " \n"); // arguments
-            printf("args[%d] : %s\n", i, args[i]);
         }
+        argc = i;
         
         if (args[0] == NULL) // just enter
             goto no_input;
 
         // terminate hysh
         if (strcmp(args[0], "exit") == 0) {
-            break;
+            exit(0);
         }
     	
         background = 0;
@@ -47,7 +48,8 @@ int main(void) {
             args[i - 1] = NULL;
             background = 1;
         }
-		
+	
+        // fork a process
         pid_t pid = fork();
         
         if (pid < 0) {
@@ -56,8 +58,7 @@ int main(void) {
         }
 
         if (pid == 0) {
-            // execvp(args[0], args);
-            execution(args[0], args);
+            execution(argc, args[0], args); // void execution(int argc, char *cmd, char *args[])
         }
 
         if (pid > 0) {

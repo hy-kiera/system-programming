@@ -1,3 +1,3 @@
 /* ../bin/execution.c */
 
-void execution(char cmd, char *args[]);
+void execution(int argc, char *cmd, char *args[]);

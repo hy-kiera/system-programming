@@ -6,22 +6,26 @@
 #include <sys/stat.h>
 #include <fcntl.h>
 
+#include "../headers/cmds.h"
+
 #define BUF_SIZE 2048
 
 static void do_cat(const char *path);
 static void die(const char *s);
 
-int main(int argc, char *argv[]){
+void cat(int argc, char *args[]){
     int i;
     // check 'cat' get argements needed
     if(argc < 2){
-        fprintf(stderr, "%s : file name not given\n", argv[1]);
-        exit(1);
+        fprintf(stderr, "%s : file name not given\n", args[1]);
+        // exit(1);
     }
-    for(i = 1; i < argc; i++){
-        do_cat(argv[i]);
+    else{
+        for(i = 1; i < argc; i++){
+        do_cat(args[i]);
+        }
     }
-    exit(0);
+    // exit(0);
 }
 
 static void do_cat(const char *path){
@@ -41,5 +45,5 @@ static void do_cat(const char *path){
 
 static void die(const char *s){
     perror(s);
-    exit(1);
+    // exit(1);
 }

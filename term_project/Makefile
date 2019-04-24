@@ -1,13 +1,13 @@
 CC = gcc
 TARGET = hysh
-CFLAGS = -W Wall
-SOURCES = ./bin/pwd.c ./bin/echo.c ./bin/clear.c ./bin/execution.c
-OBJS = pwd.o echo.o clear.o execution.o
+CFLAGS = -W -Wall
+SOURCES = ./bin/execution.c ./bin/pwd.c ./bin/echo.c ./bin/clear.c ./bin/cat.c ./bin/cd.c
+OBJS = hysh.o execution.o pwd.o echo.o clear.o cat.o cd.o
 
 all: $(TARGET)
 
-$(TARGET): hysh.o $(OBJS)
-	$(CC) $(CFLAGS) -o $(TARGET) hysh.o $(OBJS)
+$(TARGET): $(OBJS)
+	$(CC) $(CFLAGS) -o $(TARGET) $(OBJS)
 
 hysh.o: hysh.c
 	$(CC) -c -o hysh.o hysh.c
@@ -21,8 +21,14 @@ echo.o: ./bin/echo.c
 clear.o: ./bin/clear.c
 	$(CC) -c -o clear.o ./bin/clear.c
 
+cat.o: ./bin/cat.c
+	$(CC) -c -o cat.o ./bin/cat.c
+
+cd.o: ./bin/cd.c
+	$(CC) -c -o cd.o ./bin/cd.c
+
 execution.o: ./bin/execution.c
 	$(CC) -c -o execution.o ./bin/execution.c
 
 clean:
-	rm $(TARGET)
+	rm -rf $(TARGET) $(OBJS)
