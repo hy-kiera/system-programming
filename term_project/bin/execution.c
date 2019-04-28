@@ -23,5 +23,5 @@ void execution(int argc, char *args[]){
     else printf("hysh: command not found: %s\n", cmd);
 
     // kill a child process for (looks like) overwriting
-    exit(0);
+    // exit(0);
 }

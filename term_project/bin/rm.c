@@ -14,12 +14,6 @@ void rm_path(const char *path);
 void file_hide(char *file);
 void undo_hide(char *file);
 
-int main(void){
-    int argc = 3;
-    char *args[] = {"rm", "-hd", "hello"};
-    rm(argc, args);
-    return 0;
-}
 
 void rm(int argc, char *args[]){
     int i;
@@ -35,7 +29,7 @@ void rm(int argc, char *args[]){
             if (S_ISDIR(stMode)) fprintf(stderr, "rm: %s: is a directory", args[1]);
             else {
                 for(i = 1; i < argc; i++){
-                    if (remove(args[i]) == -1) fprintf(stderr, "rm: no such file or a directory\n");
+                    if (remove(args[i]) == -1) fprintf(stderr, "rm: %s: no such file or a directory\n", args[i]);
                 }
             }
         }
@@ -45,15 +39,10 @@ void rm(int argc, char *args[]){
 
             // remove the file hierarchy
             if (!strcmp(args[1], "-r")){
+                printf("STILL DEVELOPING\n");
                 // for(i = 2; i < argc; i++){
                 //     rm_path(args[i]);
                 // }
-            }
-            // remove the file hierarchy and user can decide whether deleting a file
-            else if (!strcmp(args[1], "-ri")){
-                for(i = 2; i < argc; i++){
-                    // CODE HERE
-                }
             }
             // not remove but hide(look being removed)
             else if (!strcmp(args[1], "-hd")){
@@ -77,7 +66,7 @@ void rm(int argc, char *args[]){
             }
             // show help
             else if (!strcmp(args[1], "--help") || !strcmp(args[1], "-h")){
-                printf("usage : rm [options] [file] <path>\n\nremove files or directories\n\n[options]\n\n-r : Attempt to remove the file hierarchy(directory) rooted in each file argument.\n\n-ri : Remove the file hierarchy and the user has been prompted for confirmation before each directory's contents are processed (as well as before the attempt is made to remove the directory).\n\n-hd : Hide a file as if it were deleted.\n\n-u : Undo remove -hd\n\n--help, -h : Show help.\n");
+                printf("usage : rm [options] [files ...]\n\nremove files or directories\n\n[options]\n\n-r : Attempt to remove the file hierarchy(directory) rooted in each file argument.\n\n-ri : Remove the file hierarchy and the user has been prompted for confirmation before each directory's contents are processed (as well as before the attempt is made to remove the directory).\n\n-hd : Hide a file as if it were deleted.\n\n-u : Undo remove -hd\n\n--help, -h : Show help.\n");
             }
             else {
                 fprintf(stderr, "-hysh: %s: %s: invalid signal specification\n", args[0], args[1]);
@@ -119,6 +108,7 @@ void rm_path(const char *path){
     closedir(dp);
 }
 
+// hide file
 void file_hide(char *file){
     char new_file[256];
 
@@ -129,6 +119,7 @@ void file_hide(char *file){
     if (rename(file, new_file) < 0) perror(file);
 }
 
+// reveal hidden file
 void undo_hide(char *file){
     char *new_file;
 

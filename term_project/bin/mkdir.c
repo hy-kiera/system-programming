@@ -5,6 +5,7 @@
 #include <sys/types.h>
 #include <errno.h>
 #include <string.h>
+#include <unistd.h>
 
 #include "../headers/cmds.h"
 
@@ -20,19 +21,28 @@ void makedir(int argc, char *args[]){
         // no option
         if (args[1][0] != 45){ // "-" : 45(ascii code)
             for(i = 1; i < argc; i++){
-                status = mkdir(args[i], 0755);
+                if (!mkdir(args[i], 0755)) fprintf(stderr, "mkdir: already exists\n");
             }
         }
         // with option
         else {
+            // create directory hirarichy
             if (!strcmp(args[1], "-p")){
                 for(i = 2; i < argc; i++){
                     make_path(args[i]);
                     if (status == -1) fprintf(stderr, "mkdir: no such file or directory\n");
                 }
             }
+            // make a directory and move to it.
+            else if (!strcmp(args[1], "-C")){
+                if (!mkdir(args[2], 0755)) fprintf(stderr, "mkdir: already exists\n");
+                else{
+                    if (chdir(args[3]) != 0) fprintf(stderr, "cd: %s: no such file or directory\n", args[3]);
+                }
+            }
+            // show help
             else if (!strcmp(args[1], "--help") || !strcmp(args[1], "-h")){
-                printf("usage : mkdir [options] [directory name ...]\n\nmake directories.\n\n[options]\n\n-p : If the parent directories don't exist, this command creates them.\n\n--help, -h : Show help.\n");
+                printf("usage : mkdir [options] [directory name ...]\n\nmake directories.\n\n[options]\n\n-p : If the parent directories don't exist, this command creates them.\n\n-C : Make a directory and move to it.\n\n--help, -h : Show help.\n");
             }
             else{
                 // wrong option

@@ -68,7 +68,7 @@ void ls(int argc, char *args[]){
             }
             // show help
             else if (!strcmp(args[1], "-h") || !strcmp(args[1], "--help")){
-                printf("usage : ls [options] [directory name ...]\n\nlist files in a working directory.\n\n[options]\n\n-a : List all files including hidden file starting with '.'\n\n-al, -all -la : List long format including hidden files.\n\n-l : List with long format - show permissions.\n\n--help, -h : Show help.\n");
+                printf("usage : ls [options] [directory name ...]\n\nlist files in a working directory.\n\n[options]\n\n-al, -all -la : List long format including hidden files.\n\n--help, -h : Show help.\n");
             }
             // wrong option
             else{
@@ -90,14 +90,12 @@ static void do_ls(char* path, int btn){
 	// returns a pointer to a dirent structure describing the next directory entry in the directory stream associated with dp
     while(ent = readdir(dp)){
 		if (btn){
-			if 
 			printf("%s\nd", ent->d_name);
 		}
 		else{
 			// "." : 46(ascii code
 			if (ent->d_name[0] != 46) printf("%s\n", ent->d_name);
 		}
-		cnt++;
     }
     closedir(dp);
 }

@@ -3,20 +3,12 @@
 #include <string.h>
 #include <stdlib.h>
 #include <sys/stat.h>
+#include <unistd.h>
 
 #include "../headers/cmds.h"
 #include "../headers/utils.h"
 
-void cp(int argc, char *args[]);
 void do_copy(char *source_file, char *target_file, char *new_name);
-
-
-// int main(void){
-//     int argc = 3;
-//     char *args[] = {"cp", "abc.txt", "test", "-m"};
-//     copy(argc, args);
-//     return 0;
-// }
 
 void cp(int argc, char *args[]){
     int stMode;
@@ -37,14 +29,18 @@ void cp(int argc, char *args[]){
     is_dir = S_ISDIR(stMode);
     // with option
     if (argc == 4 && is_dir){
-        if (!strcmp(args[1], "-r")){
-            // CODE HERE
+        // move the directory where has the copied file, after coping source file.
+        if (!strcmp(args[1], "-C")){
+            do_copy(args[2], args[3], NULL);
+            if (chdir(args[3]) != 0) fprintf(stderr, "cd: %s: no such file or directory\n", args[3]);
         }
+        // copy a file renamed
         else if (!strcmp(args[1], "-m")){
             do_copy(args[2], args[3], args[4]); 
         }
+        // show help
         else if (!strcmp(args[1], "--help") || !strcmp(args[1], "-h")){
-            printf("usage : cp [options] [source file] [target file] <new name>\n\ncopy a file or a directory from one directory to another\n\n[options]\n\n-r : If source file designates a file, cp copies the file. If source file designates a directory, cp copies the directory and the entire subtree connected at that point.\n\n-C : Move the directory where has the copied file, after coping source file.\n\n-m : copy a file renamed.\n\n--help, -h : Show help.\n");
+            printf("usage : cp [options] [source file] [target file] <new name>\n\ncopy a file or a directory from one directory to another\n\n[options]\n\n-C : Move the directory where has the copied file, after coping source file.\n\n-m : copy a file renamed.\n\n--help, -h : Show help.\n");
         }
         else{
             // wrong option

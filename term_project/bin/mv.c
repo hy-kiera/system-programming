@@ -17,36 +17,48 @@ void mv(int argc, char *args[]){
     char *cd = "cd ";
     
     if (argc < 2) fprintf(stderr, "%s : no arguments\n", args[0]);
-    if (argc != 3 && argc != 4){
-        fprintf(stderr, "%s: wrong arguments\n", args[0]);
-    }
-
-    // no option
-    if (argc == 3){
-        stMode = get_type(args[2]);
-        is_dir = S_ISDIR(stMode); // returns non-zero if the file is a directory
-        
-        // check renaming or moving
-        if(is_dir){
-            // move
-            do_move(args[1], args[2]);
-        }
-        else{
-            // rename
-            do_rename(args[1], args[2]);
-        }
+    if (argc > 4){
+        fprintf(stderr, "%s: too many arguments\n", args[0]);
     }
    
-    stMode = get_type(args[3]);
-    is_dir = S_ISDIR(stMode);
-    // with option
-    if (argc == 4 && is_dir){
-        if (!strcmp(args[1], "--help") || !strcmp(args[1], "-h")){
-            printf("usage : mv [options] <old_file>  <new_file>\n\nmoves one or more files or diectories from one place to another\n\n[options]\n\n--help, -h : Show help.\n");
+    if (argc == 4 || argc == 3){
+        // no option
+        if (args[1][0] != 45){ // "-" : 45(ascii code
+            stMode = get_type(args[2]);
+            is_dir = S_ISDIR(stMode); // returns non-zero if the file is a directory
+            
+            // check renaming or moving
+            if(is_dir){
+                // move
+                do_move(args[1], args[2]);
+            }
+            else{
+                // rename
+                do_rename(args[1], args[2]);
+            }
         }
+        // with option
         else{
-            // wrong option
-            fprintf(stderr, "-hysh: %s: %s: invalid signal specification", args[0], args[1]);
+            stMode = get_type(args[3]);
+            is_dir = S_ISDIR(stMode);
+            // move to the directory where a file is moved
+            if (!strcmp(args[1], "-C")){
+                do_move(args[2], args[3]);
+                if (is_dir){
+                    if (chdir(args[3]) != 0) fprintf(stderr, "cd: %s: no such file or directory\n", args[3]);
+                }
+                else{
+                    fprintf(stderr, "cd: %s: not a directory\n", args[3]);
+                }
+            }
+            // show help
+            else if (!strcmp(args[1], "--help") || !strcmp(args[1], "-h")){
+                printf("usage : mv [options] <old_file>  <new_file>\n\nmoves one or more files or diectories from one place to another\n\n[options]\n\n-C : Move to the directory where a file is moved.\n\n--help, -h : Show help.\n");
+            }
+            else{
+                // wrong option
+                fprintf(stderr, "-hysh: %s: %s: invalid signal specification", args[0], args[1]);
+            }
         }
     }
 }
