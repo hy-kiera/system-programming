@@ -6,14 +6,9 @@
 #include <errno.h>
 #include <string.h>
 
-void makedir(int argc, char *args[]);
-static void make_path(const char *path);
+#include "../headers/cmds.h"
 
-int main(void){
-    int argc = 3;
-    char *args[] = {"mkdir", "-p", "a/b/c"};
-    makedir(argc, args);
-}
+static void make_path(const char *path);
 
 void makedir(int argc, char *args[]){
     int status;
@@ -32,19 +27,12 @@ void makedir(int argc, char *args[]){
         else {
             if (!strcmp(args[1], "-p")){
                 for(i = 2; i < argc; i++){
-                    printf("i : %d\n", i);
                     make_path(args[i]);
                     if (status == -1) fprintf(stderr, "mkdir: no such file or directory\n");
                 }
             }
-            else if (!strcmp(args[1], "-C")){
-                if (argc != 3) fprintf(stderr, "%s: too many arguments", args[0]);
-                else{
-                    // cd
-                }
-            }
             else if (!strcmp(args[1], "--help") || !strcmp(args[1], "-h")){
-                printf("usage : mkdir [options] [directory name ...]\n\nmake directories.\n\n[options]\n\n-p : If the parent directories don't exist, this command creates them.\n\n-C : Make a directory and move to it.\n\n--help, -h : Show help.\n");
+                printf("usage : mkdir [options] [directory name ...]\n\nmake directories.\n\n[options]\n\n-p : If the parent directories don't exist, this command creates them.\n\n--help, -h : Show help.\n");
             }
             else{
                 // wrong option
@@ -57,6 +45,7 @@ void makedir(int argc, char *args[]){
 static void make_path(const char *path){
     int status;
     
+    // drwxr-xr-x
     if ((status = mkdir(path, 0755)) == 0){
         return;
     }
@@ -66,16 +55,15 @@ static void make_path(const char *path){
         struct stat st;
 
         if (stat(path, &st) < 0) perror("stat");
-        if (!S_ISDIR(st.st_mode)){
+        if (!S_ISDIR(st.st_mode)){ // check it is a directory
             fprintf(stderr, "file exists but is not a directory: %s\n", path);
-            // exit(1);
         }
         return;
     }
 
     // no such file or directory
     else if (errno == ENOENT){
-        char *parent_path = strdup(path);
+        char *parent_path = strdup(path); // duplicate path
 
         if (!parent_path) perror("strdup");
 
@@ -85,29 +73,27 @@ static void make_path(const char *path){
             *last-- = '\0';
         }
 
+        // root directory
         if(!strcmp(parent_path, "/")){
             fprintf(stderr, "error: root directory is not a directory???\n");
-            // exit(1);
         }
 
-        char *sep = strrchr(parent_path, '/');
+        char *sep = strrchr(parent_path, '/'); // find the last occurrence of c (converted to a character) in string
 
         if (!sep){
             fprintf(stderr, "error: current directory is not a directory???\n");
-            // exit(1);
         }
+        // root directory
         else if (sep == parent_path){
             fprintf(stderr, "error: root directory is not a directory???\n");
-            // exit(1);
         }
         *sep = '\0';
-        make_path(parent_path);
-        printf("MAKE DIR\n");
+        make_path(parent_path); // call recursive
+
         if ((status = mkdir(path, 0755)) < 0) perror(path);
         return;
     }
     else{
         perror(path);
-        //  exit(1);
     }
 }

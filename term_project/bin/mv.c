@@ -2,28 +2,19 @@
 #include <stdio.h>
 #include <string.h>
 #include <sys/stat.h>
+#include <unistd.h>
+
+#include "../headers/cmds.h"
+#include "../headers/utils.h"
 
 void mv(int argc, char *args[]);
 void do_rename(char *old_file, char *new_file);
 void do_move(char *file, char *new_path);
 
-// return the file type
-mode_t getType(const char *path){
-    struct stat file_info;
-    stat(path, &file_info);
-    return file_info.st_mode;
-}
-
-int main(void){
-    int argc = 3; // argc = sizeof(args) / sizeof(char *);
-    char *args[] = {"mv", "abc.txt", "test", "-C"};
-    mv(argc, args);
-    return 0;
-}
-
 void mv(int argc, char *args[]){
     int stMode;
     int is_dir;
+    char *cd = "cd ";
     
     if (argc < 2) fprintf(stderr, "%s : no arguments\n", args[0]);
     if (argc != 3 && argc != 4){
@@ -32,7 +23,7 @@ void mv(int argc, char *args[]){
 
     // no option
     if (argc == 3){
-        stMode = getType(args[2]);
+        stMode = get_type(args[2]);
         is_dir = S_ISDIR(stMode); // returns non-zero if the file is a directory
         
         // check renaming or moving
@@ -46,32 +37,18 @@ void mv(int argc, char *args[]){
         }
     }
    
-    stMode = getType(args[3]);
+    stMode = get_type(args[3]);
     is_dir = S_ISDIR(stMode);
     // with option
     if (argc == 4 && is_dir){
-        if (!strcmp(args[1], "-C")){
-            do_move(args[2], args[3]);
-            // cd args[2]
-        }
-        else if (!strcmp(args[1], "--help") || !strcmp(args[1], "-h")){
-            printf("usage : mv [options] <old_file>  <new_file>\n\nmoves one or more files or diectories from one place to another\n\n[options]\n\n-C : Move to the directory where a file is moved.\n\n--help, -h : Show help.\n");
+        if (!strcmp(args[1], "--help") || !strcmp(args[1], "-h")){
+            printf("usage : mv [options] <old_file>  <new_file>\n\nmoves one or more files or diectories from one place to another\n\n[options]\n\n--help, -h : Show help.\n");
         }
         else{
             // wrong option
             fprintf(stderr, "-hysh: %s: %s: invalid signal specification", args[0], args[1]);
         }
     }
-}
-
-// get file size
-long int file_size(const char *file_name){
-    struct stat st; // declare stat variable
-    
-    if (stat(file_name,&st) == 0)
-        return (st.st_size);
-    else
-        return -1;
 }
 
 void do_move(char *file, char *new_path){
@@ -97,7 +74,5 @@ void do_move(char *file, char *new_path){
 
 void do_rename(char *old_file, char *new_file){
     // the name of the file to be renamed. 
-    if (rename(old_file, new_file) < 0){
-        perror(old_file);
-    }
+    if (rename(old_file, new_file) < 0) perror(old_file);
 }

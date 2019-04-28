@@ -4,24 +4,21 @@
 #include <stdlib.h>
 #include <sys/stat.h>
 
-void copy(int argc, char *args[]);
+#include "../headers/cmds.h"
+#include "../headers/utils.h"
+
+void cp(int argc, char *args[]);
 void do_copy(char *source_file, char *target_file, char *new_name);
 
-// return the file type
-mode_t getType(const char *path){
-    struct stat file_info;
-    stat(path, &file_info);
-    return file_info.st_mode;
-}
 
-int main(void){
-    int argc = 3;
-    char *args[] = {"cp", "abc.txt", "test", "-m"};
-    copy(argc, args);
-    return 0;
-}
+// int main(void){
+//     int argc = 3;
+//     char *args[] = {"cp", "abc.txt", "test", "-m"};
+//     copy(argc, args);
+//     return 0;
+// }
 
-void copy(int argc, char *args[]){
+void cp(int argc, char *args[]){
     int stMode;
     int is_dir;
 
@@ -31,17 +28,17 @@ void copy(int argc, char *args[]){
 
     // no option
     if (argc == 3){
-        stMode = getType(args[2]);
+        stMode = get_type(args[2]);
         is_dir = S_ISDIR(stMode); // returns non-zero if the file is a directory
         if(is_dir) do_copy(args[1], args[2], NULL);
     }
 
-    stMode = getType(args[3]);
+    stMode = get_type(args[3]);
     is_dir = S_ISDIR(stMode);
     // with option
     if (argc == 4 && is_dir){
         if (!strcmp(args[1], "-r")){
-             
+            // CODE HERE
         }
         else if (!strcmp(args[1], "-m")){
             do_copy(args[2], args[3], args[4]); 
@@ -54,16 +51,6 @@ void copy(int argc, char *args[]){
             fprintf(stderr, "-hysh: %s: %s: invalid signal specification", args[0], args[1]);
         }
     }
-}
-
-// get file size
-long int file_size(const char *file_name){
-    struct stat st;
-
-    if (stat(file_name, &st) == 0)
-        return (st.st_size);
-    else
-        return -1;
 }
 
 void do_copy(char *source_file, char *target_file, char *new_name){
