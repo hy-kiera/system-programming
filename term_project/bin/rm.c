@@ -39,7 +39,7 @@ void rm(int argc, char *args[]){
 
             // remove the file hierarchy
             if (!strcmp(args[1], "-r")){
-                printf("STILL DEVELOPING\n");
+                printf("DEVELOPING\n");
                 // for(i = 2; i < argc; i++){
                 //     rm_path(args[i]);
                 // }

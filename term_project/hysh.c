@@ -119,6 +119,8 @@ void cd(int argc, char *args[]){
     }
 }
 
+/* list a history that user commanded */
+
 void history(int argc, char *args[], char *hist[]){
     int i;
 
@@ -135,11 +137,11 @@ void history(int argc, char *args[], char *hist[]){
     else{
         // argc == 3, macro of executing current <n> cmds
         if (!strcmp(args[1], "-mc")){
-            // CODE HERE
+            printf("DEVELOPING\n");
         }
         // show help
-        else if (!strcmp(args[1], "--help") || !strcmp(args[1], "-h")){
-            printf("usage :\n");
+        if (!strcmp(args[1], "--help") || !strcmp(args[1], "-h")){
+            printf("usage : history [option] <integer>\n\nList a history that user commanded.\n\n[options]\n\n-mc : It is a macro of executing last <integer> commands by 500 cmds.\n\n--help, -h : Show help.\n");
         }
         // wrong option
         else{
@@ -147,6 +149,8 @@ void history(int argc, char *args[], char *hist[]){
         }
     }
 }
+
+/* introduce how to use hysh */
 
 void hysh(int argc){
     if (argc == 1){ // hysh
@@ -166,6 +170,7 @@ void hysh(int argc){
         printf("WITH OPTIONS\n\n");
         printf("\033[0;31mcp\033[0m [options] [source file] [target file] <new name>\n\n[options]\n\n-C : Move the directory where has the copied file, after coping source file.\n\n-m : copy a file renamed.\n\n--help, -h : Show help.\n\n");
         printf("\033[0;31mhello\033[0m [options] <path>\n\n[options]\n\n-p : create hello.c in a path that user input.\n\n-mf <path>: create hello.c with Makefile.\n\n--help, -h : Show help.\n\n");
+        printf("\033[0;31mhistory\033[0m [option] <integer>\n\nList a history that user commanded.\n\n[options]\n\n-mc : It is a macro of executing last <integer> commands by 500 cmds.\n\n--help, -h : Show help.\n");
         printf("\033[0;31mls\033[0m [options] [directory name ...]\n\n[options]\n\n-al, -all -la : List long format including hidden files.\n\n--help, -h : Show help.\n\n");
         printf("\033[0;31mmkdir\033[0m [options] [directory name ...]\n\n[options]\n\n-p : If the parent directories don't exist, this command creates them.\n\n-C : Make a directory and move to it.\n\n--help, -h : Show help.\n\n");
         printf("\033[0;31mmv\033[0m [options] <old_file>  <new_file>\n\n[options]\n\n-C : Move to the directory where a file is moved.\n\n--help, -h : Show help.\n\n");

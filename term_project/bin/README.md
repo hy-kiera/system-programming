@@ -1,4 +1,5 @@
 # CMD
+ - [x] `hysh` : introduce how to use hysh
  - [x] `ls` : list files(directories) in the current path
  - [x] `pwd` : print the name of the current(working) directory
  - [x] `cd` : change the current working directory
@@ -10,3 +11,4 @@
  - [x] `cat` : concatenate and print files
  - [x] `clear` : bring the command line on top of the terminal
  - [x] `hello` : create a hello.c that prints 'hello world!'
+ - [x] `history` : list a history that user commanded
