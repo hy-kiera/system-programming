@@ -175,8 +175,9 @@ trap_signal(int sig, sighandler_t handler)
 static void
 detach_children(void)
 {
-    struct sigaction act;
+	struct sigaction act;
 
+	// TODO
 	act.sa_handler = noop_handler;
 	sigemptyset(&act.sa_mask);
 	act.sa_flags = SA_RESTART |  SA_NOCLDWAIT;
@@ -199,11 +200,12 @@ noop_handler(int sig)
 static int
 listen_socket(char *port)
 {
-    struct addrinfo hints, *res, *ai;
-    int err;
+	struct addrinfo hints, *res, *ai;
+	int err;
 
+	// TODO
 	memset(&hints, 0, sizeof(struct addrinfo));
-    // getaddr()
+	// getaddr()
 	hints.ai_family = AF_INET;
 	hints.ai_socktype = SOCK_STREAM;
 	hints.ai_flags = AI_PASSIVE;
@@ -212,10 +214,10 @@ listen_socket(char *port)
 		exit(1);
 	}
 
-    for (ai = res; ai; ai = ai->ai_next) {
-        int sockfd;
+	for (ai = res; ai; ai = ai->ai_next) {
+		int sockfd;
 
-        // socket()->bind()->listen()
+		// socket()->bind()->listen()
 		sockfd = socket(ai->ai_family, ai->ai_socktype, ai->ai_protocol);
 
 		if (sockfd < 0) continue;
@@ -229,47 +231,44 @@ listen_socket(char *port)
 			close(sockfd);
 			continue;
 		}
-		
+
 		freeaddrinfo(res);
-        return sockfd;
-    }
-    log_exit("failed to listen socket");
-    return -1;  /* NOT REACH */
+		return sockfd;
+	}
+	log_exit("failed to listen socket");
+	return -1;  /* NOT REACH */
 }
 
 static void
 server_main(int listen_sock_fd, char *docroot)
 {
-    for (;;) {
-        struct sockaddr_storage addr;
-        socklen_t addrlen = sizeof addr;
-        FILE *inf, *outf;
-        int accepted_sock_fd; // active socker
-        int pid;
-		
-		if ((accepted_sock_fd = accept(listen_sock_fd, (struct sockaddr *)&addr, &addrlen) < 0)) {
+	for (;;) {
+		struct sockaddr_storage addr;
+		socklen_t addrlen = sizeof addr;
+		int accepted_sock_fd; // active socker
+		int pid;
+
+		// TODO
+		if ((accepted_sock_fd = accept(listen_sock_fd, (struct sockaddr *)&addr, &addrlen)) < 0) {
 			perror("ERROR on accept");
 			exit(1);
 		}
 
 		pid = fork();
-
 		if (pid == -1){
 			// error
 			perror("ERROR on fork");
 			exit(1);
 		}
 		else if (pid == 0){
+			FILE *inf, *outf;
 			// child process
 			inf = fdopen(accepted_sock_fd, "r");
 			outf = fdopen(accepted_sock_fd, "w");
 			service(inf, outf, docroot);
 			exit(0);
 		}
-		else {
-			// parent process
-		}
-    
+		close(accepted_sock_fd);
 	}
 }
 
