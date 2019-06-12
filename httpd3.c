@@ -145,6 +145,7 @@ main(int argc, char *argv[])
     install_signal_handlers();
     listen_sock_fd = listen_socket(port);
     if (daemon_mode) {
+	// TODO
         openlog("httpd3", LOG_PID, LOG_DAEMON);
         become_daemon();
     }
@@ -156,7 +157,7 @@ static void
 become_daemon(void)
 { 
 	int n;
-	
+	// TODO
 	/*
 	if (chdir("/") < 0)
 		log_exit("chdir(2) failed: %s", strerror(errno));
@@ -612,6 +613,7 @@ my_log(int priority, const char *fmt, ...)
         fputc('\n', stderr);
     }
     else {
+	// TODO
     	vsyslog(LOG_INFO, fmt, ap);
 	}
     va_end(ap);
