@@ -24,30 +24,30 @@ int main(void) {
             exit(1);
             break;
         case 0 : /* child */
-			// read
-			close(fd2[0]);
-			buf[0] = '\0';
-			write(fd2[1], "Message Test\n", 14);
-			close(fd2[1]);
-			// write
+	    // write
+	    close(fd2[0]);
+            buf[0] = '\0';
+	    write(fd2[1], "Message Test\n", 14);
+	    close(fd2[1]);
+	    // read
             close(fd1[1]);
             write(1, "Child Process:", 15);
             len = read(fd1[0], buf, 256);
             write(1, buf, len);
             close(fd1[0]);
-			break;
+	    break;
         default :
-			// read
+	    // write
             close(fd1[0]);
             buf[0] = '\0';
             write(fd1[1], "Test Message\n", 14);
             close(fd1[1]);
-			// write
-			close(fd2[1]);
-			write(1, "Parent Process:", 16);
-			len = read(fd2[0], buf, 256);
-			write(1, buf, len);
-			close(fd2[0]);
+	    // read
+	    close(fd2[1]);
+	    write(1, "Parent Process:", 16);
+	    len = read(fd2[0], buf, 256);
+	    write(1, buf, len);
+            close(fd2[0]);
             waitpid(pid, &status, 0);
             break;
     }
